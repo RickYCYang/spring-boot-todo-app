@@ -1,4 +1,4 @@
-package net.javaguides.todo.utils;
+package net.javaguides.todo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

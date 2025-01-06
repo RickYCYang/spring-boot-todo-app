@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -29,6 +29,7 @@ public class TodoController {
     TodoService todoService;
 
     // http://localhost:8080/api/todo
+    @PreAuthorize("hasRole('ADMIN')") // method level security control
     @PostMapping
     public ResponseEntity<TodoDto> addTodo(@RequestBody TodoDto todoDto) {
         TodoDto savedTodoDto = todoService.addTodo(todoDto);
@@ -36,6 +37,7 @@ public class TodoController {
     }
 
     // http://localhost:8080/api/todo/1
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')") // method level security control
     @GetMapping("{id}")
     public ResponseEntity<TodoDto> getTodo(@PathVariable Long id) {
         TodoDto todoDto = todoService.getTodo(id);
@@ -43,6 +45,7 @@ public class TodoController {
     }
 
     // http://localhost:8080/api/todo
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')") // method level security control
     @GetMapping
     public ResponseEntity<List<TodoDto>> getAllTodos() {
         List<TodoDto> todoDtos = todoService.getTodos();
@@ -50,6 +53,7 @@ public class TodoController {
     }
 
     // http://localhost:8080/api/todo/1
+    @PreAuthorize("hasRole('ADMIN')") // method level security control
     @PutMapping("{id}")
     public ResponseEntity<TodoDto> updateTodo(@PathVariable Long id, @RequestBody TodoDto todoDto) {
         TodoDto updateTodoDto = todoService.updateTodo(id, todoDto);
@@ -57,6 +61,7 @@ public class TodoController {
     }
 
     // http://localhost:8080/api/todo/1
+    @PreAuthorize("hasRole('ADMIN')") // method level security control
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteTodo(@PathVariable Long id) {
         todoService.deleteTodo(id);
@@ -64,6 +69,7 @@ public class TodoController {
     }
 
     // http://localhost:8080/api/todo/1
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')") // method level security control
     @PatchMapping("{id}/complete")
     public ResponseEntity<TodoDto> completeTodo(@PathVariable Long id) {
         TodoDto todoDto = todoService.completeTodo(id);
@@ -71,6 +77,7 @@ public class TodoController {
     }
 
     // http://localhost:8080/api/todo/1
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')") // method level security control
     @PatchMapping("{id}/in-complete")
     public ResponseEntity<TodoDto> inCompleteTodo(@PathVariable Long id) {
         TodoDto todoDto = todoService.inCompleteTodo(id);
